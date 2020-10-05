@@ -1,18 +1,16 @@
-// Components/FilmItem.js
-
 import React from 'react'
 import { StyleSheet, View, Text, Image } from 'react-native'
 import { getImageFromApi } from '../API/TMDBApi'
 
 class FilmItem extends React.Component {
   render() {
-      const film = this.props.film
+    const film = this.props.film
     return (
       <View style={styles.main_container}>
-        <Image
-          style={styles.image}
-          source={{uri: getImageFromApi(film.poster_path)}}
-        />
+      <Image
+        style={styles.image}
+        source={{uri: getImageFromApi(film.poster_path)}}
+      />
         <View style={styles.content_container}>
           <View style={styles.header_container}>
             <Text style={styles.title_text}>{film.title}</Text>
@@ -44,7 +42,7 @@ const styles = StyleSheet.create({
   },
   content_container: {
     flex: 1,
-    margin: 5,
+    margin: 5
   },
   header_container: {
     flex: 3,
@@ -52,36 +50,29 @@ const styles = StyleSheet.create({
   },
   title_text: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 20,
     flex: 1,
     flexWrap: 'wrap',
-    paddingRight: 5, 
+    paddingRight: 5
   },
   vote_text: {
     fontWeight: 'bold',
-    fontSize: 24,
-    color: 'orange',
-    paddingRight: 5,
+    fontSize: 26,
+    color: '#666666'
   },
   description_container: {
-    flex: 6,
-    paddingRight: 5,
-
+    flex: 7
   },
   description_text: {
     fontStyle: 'italic',
-    textAlign: 'justify',
-    color: '#666666',
-    paddingTop: 6
+    color: '#666666'
   },
   date_container: {
-    flex: 1, 
-    paddingTop: 30,
+    flex: 1
   },
   date_text: {
     textAlign: 'right',
-    fontSize: 14,
-    paddingRight: 5
+    fontSize: 14
   }
 })
 

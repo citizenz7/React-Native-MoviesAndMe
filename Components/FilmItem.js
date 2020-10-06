@@ -32,7 +32,7 @@ class FilmItem extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     height: 190,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   image: {
     width: 120,
@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
   },
   title_text: {
     fontWeight: 'bold',
-    fontSize: 20,
-    flex: 1,
+    fontSize: 19,
+    flex: 2,
     flexWrap: 'wrap',
-    paddingRight: 5
+    paddingRight: 5,
   },
   vote_text: {
     fontWeight: 'bold',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     color: '#666666'
   },
   description_container: {
-    flex: 7
+    flex: 7,
   },
   description_text: {
     fontStyle: 'italic',

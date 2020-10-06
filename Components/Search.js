@@ -44,6 +44,10 @@ class Search extends React.Component {
     })
   }
 
+  _displayDetailForFilm = (idFilm) => {
+    this.props.navigation.navigate("FilmDetail", { idFilm: idFilm })
+  }
+
   _displayLoading() {
     if (this.state.isLoading) {
       return (
@@ -74,6 +78,7 @@ class Search extends React.Component {
                  this._loadFilms()
               }
           }}
+          renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm}/>}
         />
         {this._displayLoading()}
       </View>
@@ -83,12 +88,9 @@ class Search extends React.Component {
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1,
-    marginTop: 50
+    flex: 1
   },
   textinput: {
-    marginLeft: 5,
-    marginRight: 5,
     height: 50,
     borderColor: '#000000',
     borderWidth: 1,

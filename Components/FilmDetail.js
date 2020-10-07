@@ -1,7 +1,7 @@
 // Components/FilmDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
@@ -12,22 +12,28 @@ class FilmDetail extends React.Component {
     super(props)
     this.state = {
       film: undefined,
-      isLoading: true
+      isLoading: false
     }
   }
 
   componentDidMount() {
+    const favoriteFilmIndex = this.props.favoritesFilm.findIndex(item => item.id === this.props.navigation.state.params.idFilm)
+    if (favoriteFilmIndex !== -1) { // Film déjà dans nos favoris, on a déjà son détail
+      // Pas besoin d'appeler l'API ici, on ajoute le détail stocké dans notre state global au state de notre component
+      this.setState({
+        film: this.props.favoritesFilm[favoriteFilmIndex]
+      })
+      return
+    }
+    // Le film n'est pas dans nos favoris, on n'a pas son détail
+    // On appelle l'API pour récupérer son détail
+    this.setState({ isLoading: true })
     getFilmDetailFromApi(this.props.navigation.state.params.idFilm).then(data => {
       this.setState({
         film: data,
         isLoading: false
       })
     })
-  }
-
-  componentDidUpdate() {
-    console.log("componentDidUpdate : ")
-    console.log(this.props.favoritesFilm)
   }
 
   _displayLoading() {
@@ -43,6 +49,20 @@ class FilmDetail extends React.Component {
   _toggleFavorite() {
     const action = { type: "TOGGLE_FAVORITE", value: this.state.film }
     this.props.dispatch(action)
+  }
+
+  _displayFavoriteImage() {
+    var sourceImage = require('../Images/ic_favorite_border.png')
+    if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
+      // Film dans nos favoris
+      sourceImage = require('../Images/ic_favorite.png')
+    }
+    return (
+      <Image
+        style={styles.favorite_image}
+        source={sourceImage}
+      />
+    )
   }
 
   _displayFilm() {
@@ -78,21 +98,6 @@ class FilmDetail extends React.Component {
     }
   }
 
-  _displayFavoriteImage() {
-    var sourceImage = require('../Images/ic_favorite_border.png')
-    if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
-      // Film dans nos favoris
-      sourceImage = require('../Images/ic_favorite.png')
-    }
-    return (
-      <Image
-        style={styles.favorite_image}
-        source={sourceImage}
-      />
-    )
-}
-
-
   render() {
     return (
       <View style={styles.main_container}>
@@ -116,9 +121,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  favorite_container: {
-    alignItems: 'center', // Alignement des components enfants sur l'axe secondaire, X ici
-  },
   scrollview_container: {
     flex: 1
   },
@@ -138,6 +140,9 @@ const styles = StyleSheet.create({
     color: '#000000',
     textAlign: 'center'
   },
+  favorite_container: {
+    alignItems: 'center',
+  },
   description_text: {
     fontStyle: 'italic',
     color: '#666666',
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
   favorite_image: {
     width: 40,
     height: 40
-}
+  }
 })
 
 const mapStateToProps = (state) => {
